@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мій веб-проект</title>
+</head>
+<body>
+    <header>
+        <h1>Ласкаво просимо на мій веб-сайт</h1>
+        <nav>
+            <ul>
+                <li><a href="#">Головна</a></li>
+                <li><a href="#">Про нас</a></li>
+                <li><a href="#">Контакти</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2>1. Гіперпосилання</h2>
+            <p><a href="https://www.example.com">Посилання на інший сайт</a></p>
+        </section>
+
+        <section>
+            <h2>2. Вкладені блоки</h2>
+            <div>
+                <p>Це перший блок</p>
+                <div>
+                    <p>Це вкладений блок</p>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>3. Рисунки</h2>
+            <img src="image/image.jpeg" alt="Приклад">
+        </section>
+
+        <section>
+            <h2>4. Текст з заголовком</h2>
+            <h3>Підзаголовок</h3>
+            <p>Це текст з використанням <strong>тегів форматування</strong> HTML.</p>
+        </section>
+
+        <section>
+            <h2>5. Спеціальні символи</h2>
+            <p>Знак копірайту: &copy;</p>
+            <p>Знак валюти: &#8372;</p>
+        </section>
+
+        <section>
+            <h2>6. Таблиця</h2>
+            <table border="1">
+                <tr>
+                    <th>Днів</th>
+                    <th>Місяців</th>
+                </tr>
+                <tr>
+                    <td>4567</td>
+                    <td>34</td>
+                </tr>
+                <tr>
+                    <td>4643</td>
+                    <td>37</td>
+                </tr>
+            </table>
+        </section>
+
+        <section>
+            <h2>7. Списки</h2>
+            <h3>Нумерований список:</h3>
+            <ol>
+                <li>Перший елемент</li>
+                <li>Другий елемент</li>
+                <li>Третій елемент</li>
+            </ol>
+            <h3>Маркований список:</h3>
+            <ul>
+                <li>Елемент 1</li>
+                <li>Елемент 2</li>
+                <li>Елемент 3</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>8. Форми</h2>
+            <form action="#" method="post">
+                <div>
+                    <label for="name">Ім'я:</label>
+                    <input type="text" id="name" name="name">
+                </div>
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email">
+                </div>
+                <div>
+                    <label for="message">Повідомлення:</label>
+                    <textarea id="message" name="message"></textarea>
+                </div>
+                <div>
+                    <input type="submit" value="Надіслати">
+                </div>
+            </form>
+        </section>
+
+        <!-- Додані форми -->
+        <section>
+            <h2>Додаткові форми</h2>
+            <form action="#" method="post">
+                <div>
+                    <label for="username">Ім'я користувача:</label>
+                    <input type="text" id="username" name="username">
+                </div>
+                <div>
+                    <label for="password">Пароль:</label>
+                    <input type="password" id="password" name="password">
+                </div>
+                <div>
+                    <label for="age">Вік:</label>
+                    <input type="number" id="age" name="age">
+                </div>
+                <div>
+                    <label for="gender">Стать:</label>
+                    <select id="gender" name="gender">
+                        <option value="male">Чоловік</option>
+                        <option value="female">Жінка</option>
+                        <option value="other">Інше</option>
+                    </select>
+                </div>
+                <div>
+                    <input type="checkbox" id="subscribe" name="subscribe">
+                    <label for="subscribe">Підписатися на новини</label>
+                </div>
+                <div>
+                    <input type="submit" value="Надіслати">
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Мій веб-проект</p>
+    </footer>
+</body>
+</html>
