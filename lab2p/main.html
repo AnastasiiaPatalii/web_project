@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Географічний тест</title>
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    const geographyTest = {
+      testName: "Тест з географії",
+      questions: [
+        {
+          question: "Яка найбільша країна за територією?",
+          answers: [
+            { answer: "США", isCorrect: false },
+            { answer: "Китай", isCorrect: false },
+            { answer: "Росія", isCorrect: true },
+            { answer: "Канада", isCorrect: false }
+          ]
+        },
+        {
+          question: "Який найбільший океан на планеті?",
+          answers: [
+            { answer: "Атлантичний", isCorrect: false },
+            { answer: "Індійський", isCorrect: false },
+            { answer: "Тихий", isCorrect: true },
+            { answer: "Північний Льодовитий", isCorrect: false }
+          ]
+        },
+        {
+          question: "Яке найбільше озеро в світі?",
+          answers: [
+            { answer: "Каспійське море", isCorrect: false },
+            { answer: "Велике Солоне", isCorrect: false },
+            { answer: "Мічиган", isCorrect: false },
+            { answer: "Верхнє", isCorrect: true }
+          ]
+        },
+        {
+          question: "Яка столиця Італії?",
+          answers: [
+            { answer: "Мадрид", isCorrect: false },
+            { answer: "Париж", isCorrect: false },
+            { answer: "Рим", isCorrect: true },
+            { answer: "Лондон", isCorrect: false }
+          ]
+        },
+        {
+          question: "Яка найбільша гора в світі?",
+          answers: [
+            { answer: "Еверест", isCorrect: true },
+            { answer: "Макінлі", isCorrect: false },
+            { answer: "Аконкагуа", isCorrect: false },
+            { answer: "Кіліманджаро", isCorrect: false }
+          ]
+        }
+      ]
+    };
+
+    function displayGeographyTest() {
+      const testContainer = document.getElementById('geographyTestContainer');
+      testContainer.innerHTML = '';
+      geographyTest.questions.forEach((question, index) => {
+        const questionDiv = document.createElement('div');
+        questionDiv.classList.add('question');
+        questionDiv.innerHTML = `
+          <h3>Питання ${index + 1}:</h3>
+          <p>${question.question}</p>
+          ${question.answers.map((answer, answerIndex) => `
+              <input type="radio" id="geographyAnswer${index}_${answerIndex}" name="geographyQuestion${index}" value="${answerIndex}">
+              <label for="geographyAnswer${index}_${answerIndex}">${answer.answer}</label><br>
+            `).join('')}
+        `;
+        testContainer.appendChild(questionDiv);
+      });
+    }
+
+    function submitGeographyTest() {
+      let totalCorrect = 0;
+      geographyTest.questions.forEach((question, index) => {
+        const selectedAnswerIndex = parseInt(document.querySelector(`input[name="geographyQuestion${index}"]:checked`).value);
+        const selectedAnswer = question.answers[selectedAnswerIndex];
+        if (selectedAnswer.isCorrect) {
+          totalCorrect++;
+        }
+      });
+      const resultDiv = document.getElementById('geographyTestResult');
+      resultDiv.innerHTML = `
+        <h2>Результат тесту:</h2>
+        <p>Загальна кількість питань: ${geographyTest.questions.length}</p>
+        <p>Кількість правильних відповідей: ${totalCorrect}</p>
+        <p>Відсоток правильних відповідей: ${(totalCorrect / geographyTest.questions.length * 100).toFixed(2)}%</p>
+      `;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      displayGeographyTest();
+    });
+  </script>
+</head>
+<body>
+  <h1>Географічний тест</h1>
+  <div id="geographyTestContainer"></div>
+  <button onclick="submitGeographyTest()">Завершити тест</button>
+  <div id="geographyTestResult"></div>
+</body>
+</html>

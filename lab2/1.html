@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Опитування та фільтрація</title>
+</head>
+<body>
+
+<h2>Форма опитування</h2>
+<form id="surveyForm">
+    <label for="faculty">На якому факультеті ви навчаєтесь?</label><br>
+    <select id="faculty" name="faculty">
+        <option value="IT">IT</option>
+        <option value="Менеджмент">Менеджмент</option>
+        <option value="Фізика">Фізика</option>
+    </select><br><br>
+    
+    <label>Виберіть потік на якому ви навчаєтесь:</label><br>
+    <input type="radio" id="stream1" name="stream" value="Stream1">
+    <label for="stream1">Потік 1</label><br>
+    <input type="radio" id="stream2" name="stream" value="Stream2">
+    <label for="stream2">Потік 2</label><br>
+    <br>
+    
+    <label>Вкажіть групу:</label><br>
+    <input type="checkbox" id="group1" name="group" value="Group1">
+    <label for="group1">Група 1</label><br>
+    <input type="checkbox" id="group2" name="group" value="Group2">
+    <label for="group2">Група 2</label><br>
+    <br>
+    
+    <label for="interviewTime">Виберіть зручний час для проходження співбесіди:</label><br>
+    <input type="datetime-local" id="interviewTime" name="interviewTime"><br><br>
+    
+    <label for="averageScore">Вкажіть середній бал (від 1 до 10):</label><br>
+    <input type="number" id="averageScore" name="averageScore" min="1" max="10"><br><br>
+    
+    <label for="email">Введіть ваш email:</label><br>
+    <input type="email" id="email" name="email"><br><br>
+    
+    <label for="essay">Напишіть короткий есе:</label><br>
+    <textarea id="essay" name="essay" rows="4" cols="50"></textarea><br><br>
+    
+    <label for="agree">Погоджуюся з умовами:</label><br>
+    <input type="checkbox" id="agree" name="agree" value="agree"><br><br>
+    
+    <label for="color">Виберіть улюблений колір:</label><br>
+    <input type="color" id="color" name="color"><br><br>
+    
+    <label for="cv">Завантажте ваше резюме (CV):</label><br>
+    <input type="file" id="cv" name="cv"><br><br>
+    
+    <button type="submit">Надіслати</button>
+</form>
+
+<h2>Фільтр за факультетом</h2>
+<form id="facultyFilterForm">
+    <label for="facultyFilter">Виберіть факультет для фільтрації:</label><br>
+    <select id="facultyFilter" name="facultyFilter">
+        <option value="IT">IT</option>
+        <option value="Менеджмент">Менеджмент</option>
+        <option value="Фізика">Фізика</option>
+    </select><br><br>
+    <button type="submit">Фільтрувати</button>
+</form>
+
+<div id="filteredResults"></div>
+
+<h2>Фільтр за датою і часом співбесіди</h2>
+<form id="interviewDateTimeFilterForm">
+    <label for="interviewDate">Виберіть дату співбесіди:</label><br>
+    <input type="date" id="interviewDate" name="interviewDate"><br><br>
+    <label for="interviewTime">Виберіть час співбесіди:</label><br>
+    <input type="time" id="interviewTime" name="interviewTime"><br><br>
+    <button type="submit">Фільтрувати</button>
+</form>
+
+<div id="interviewDateTimeFilteredResults"></div>
+
+<h2>Фільтр за середнім балом</h2>
+<form id="averageScoreFilterForm">
+    <label for="minAverageScore">Мінімальний середній бал:</label><br>
+    <input type="number" id="minAverageScore" name="minAverageScore" min="1" max="10"><br><br>
+    <label for="maxAverageScore">Максимальний середній бал:</label><br>
+    <input type="number" id="maxAverageScore" name="maxAverageScore" min="1" max="10"><br><br>
+    <button type="submit">Фільтрувати</button>
+</form>
+
+<div id="averageScoreFilteredResults"></div>
+
+<script>
+    document.getElementById('surveyForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+        const surveyData = {};
+        for (const [key, value] of formData.entries()) {
+            surveyData[key] = value;
+        }
+        const surveys = JSON.parse(localStorage.getItem('surveys')) || [];
+        surveys.push(surveyData);
+        localStorage.setItem('surveys', JSON.stringify(surveys));
+        this.reset();
+        console.log('Дані опитування збережено в LocalStorage:', surveyData);
+    });
+
+    document.getElementById('facultyFilterForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const facultyFilterValue = document.getElementById('facultyFilter').value;
+        const surveys = JSON.parse(localStorage.getItem('surveys')) || [];
+        const filteredSurveys = surveys.filter(survey => survey.faculty === facultyFilterValue);
+        displayFilteredResults(filteredSurveys);
+    });
+
+    document.getElementById('interviewDateTimeFilterForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const interviewDate = document.getElementById('interviewDate').value;
+        const interviewTime = document.getElementById('interviewTime').value;
+        const surveys = JSON.parse(localStorage.getItem('surveys')) || [];
+        const filteredSurveys = surveys.filter(survey => survey.interviewTime === interviewTime && survey.interviewDate === interviewDate);
+        displayInterviewDateTimeFilteredResults(filteredSurveys);
+    });
+
+    document.getElementById('averageScoreFilterForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const minAverageScore = parseInt(document.getElementById('minAverageScore').value);
+        const maxAverageScore = parseInt(document.getElementById('maxAverageScore').value);
+        const surveys = JSON.parse(localStorage.getItem('surveys')) || [];
+        const filteredSurveys = surveys.filter(survey => survey.averageScore >= minAverageScore && survey.averageScore <= maxAverageScore);
+        displayAverageScoreFilteredResults(filteredSurveys);
+    });
+
+    function displayFilteredResults(filteredSurveys) {
+        const filteredResultsDiv = document.getElementById('filteredResults');
+        filteredResultsDiv.innerHTML = '';
+        if (filteredSurveys.length === 0) {
+            filteredResultsDiv.textContent = 'Немає результатів для відображення';
+        } else {
+            const ul = document.createElement('ul');
+            filteredSurveys.forEach(survey => {
+                const li = document.createElement('li');
+                li.textContent = JSON.stringify(survey);
+                ul.appendChild(li);
+            });
+            filteredResultsDiv.appendChild(ul);
+        }
+    }
+
+    function displayInterviewDateTimeFilteredResults(filteredSurveys) {
+        const interviewDateTimeFilteredResults = document.getElementById('interviewDateTimeFilteredResults');
+        interviewDateTimeFilteredResults.innerHTML = '';
+        if (filteredSurveys.length === 0) {
+            interviewDateTimeFilteredResults.textContent = 'Немає результатів для відображення';
+        } else {
+            const ul = document.createElement('ul');
+            filteredSurveys.forEach(survey => {
+                const li = document.createElement('li');
+                li.textContent = JSON.stringify(survey);
+                ul.appendChild(li);
+            });
+            interviewDateTimeFilteredResults.appendChild(ul);
+        }
+    }
+
+    function displayAverageScoreFilteredResults(filteredSurveys) {
+        const averageScoreFilteredResults = document.getElementById('averageScoreFilteredResults');
+        averageScoreFilteredResults.innerHTML = '';
+        if (filteredSurveys.length === 0) {
+            averageScoreFilteredResults.textContent = 'Немає результатів для відображення';
+        } else {
+            const ul = document.createElement('ul');
+            filteredSurveys.forEach(survey => {
+                const li = document.createElement('li');
+                li.textContent = JSON.stringify(survey);
+                ul.appendChild(li);
+            });
+            averageScoreFilteredResults.appendChild(ul);
+        }
+    }
+</script>
+
+</body>
+</html>

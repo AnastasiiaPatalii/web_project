@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  canvas {
+    border: 1px solid #000;
+    display: block;
+    margin: 0 auto;
+  }
+  table {
+    border-collapse: collapse;
+    width: 200px;
+  }
+  th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+</style>
+</head>
+<body>
+<canvas id="myCanvas" width="480" height="320"></canvas>
+<script>
+  var canvas = document.getElementById("myCanvas");
+  var ctx = canvas.getContext("2d");
+  var ballRadius = 10;
+  var x = canvas.width / 2;
+  var y = canvas.height - 30;
+  var dx = 2;
+  var dy = -2;
+  var paddleHeight = 10;
+  var paddleWidth = 75;
+  var paddleX = (canvas.width - paddleWidth) / 2;
+  var rightPressed = false;
+  var leftPressed = false;
+  var score = 0; // Variable to store the score
+
+  document.addEventListener("keydown", keyDownHandler, false);
+  document.addEventListener("keyup", keyUpHandler, false);
+
+  function keyDownHandler(e) {
+    if (e.key == "Right" || e.key == "ArrowRight") {
+      rightPressed = true;
+    } else if (e.key == "Left" || e.key == "ArrowLeft") {
+      leftPressed = true;
+    }
+  }
+
+  function keyUpHandler(e) {
+    if (e.key == "Right" || e.key == "ArrowRight") {
+      rightPressed = false;
+    } else if (e.key == "Left" || e.key == "ArrowLeft") {
+      leftPressed = false;
+    }
+  }
+
+  function drawBall() {
+    ctx.beginPath();
+    ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+    ctx.fillStyle = "#0095DD";
+    ctx.fill();
+    ctx.closePath();
+  }
+
+  function drawPaddle() {
+    ctx.beginPath();
+    ctx.rect(paddleX, canvas.height - paddleHeight, paddleWidth, paddleHeight);
+    ctx.fillStyle = "#0095DD";
+    ctx.fill();
+    ctx.closePath();
+  }
+
+  function drawScore() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText("Score: " + score, 8, 20);
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBall();
+    drawPaddle();
+    drawScore();
+
+    if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+      dx = -dx;
+    }
+    if (y + dy < ballRadius) {
+      dy = -dy;
+    } else if (y + dy > canvas.height - ballRadius) {
+      if (x > paddleX && x < paddleX + paddleWidth) {
+        dy = -dy;
+        score++; // Add 1 to the score for each ball bounced
+      } else {
+        // Check and update the high and low scores
+        updateHighScores(score);
+        alert("Game over. Press OK to see the results.");
+        document.location.reload();
+      }
+    }
+
+    if (rightPressed && paddleX < canvas.width - paddleWidth) {
+      paddleX += 7;
+    } else if (leftPressed && paddleX > 0) {
+      paddleX -= 7;
+    }
+
+    x += dx;
+    y += dy;
+    requestAnimationFrame(draw);
+  }
+
+  // Function to update the high and low scores
+  function updateHighScores(score) {
+    var highScores = JSON.parse(localStorage.getItem("highScores")) || [];
+    highScores.push(score);
+    highScores.sort((a, b) => b - a); // Sort in descending order
+    highScores = highScores.slice(0, 3); // Show only top three high scores
+    localStorage.setItem("highScores", JSON.stringify(highScores));
+
+    // Display high and low scores on the screen
+    var bestScoresContainer = document.getElementById("bestScores");
+    var worstScoresContainer = document.getElementById("worstScores");
+    bestScoresContainer.innerHTML = "<strong>Best Scores:</strong><br>" + highScores.join(", ");
+    worstScoresContainer.innerHTML = "<strong>Worst Scores:</strong><br>" + highScores.reverse().join(", ");
+  }
+
+  // Start the game when the button is clicked
+  function startGame() {
+    document.getElementById("startButton").style.display = "none";
+    draw();
+  }
+
+</script>
+
+<button id="startButton" onclick="startGame()">Start Game</button>
+
+<table>
+  <tr>
+    <th id="bestScores">Best Scores:</th>
+  </tr>
+  <tr>
+    <th id="worstScores">Worst Scores:</th>
+  </tr>
+</table>
+
+</body>
+</html>
