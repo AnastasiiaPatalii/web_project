@@ -1,0 +1,8 @@
+/* Стилі для класів, які не можна просто додати через Tailwind CSS */
+#menu-btn {
+    display: none;
+}
+
+#menu-close {
+    display: none;
+}
